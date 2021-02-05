@@ -16,7 +16,7 @@ print("##########################################\n\n\n\n")
 # 丢弃无用数据 并检查数据集
 # 注意：有两个duration，我把有缺失值的那个删掉了
 print("################  STEP 2  ################")
-data.drop(['Row'], axis=1, inplace=True)
+# data.drop(['Row'], axis=1, inplace=True)
 data.drop(['Sample Name'], axis=1, inplace=True)
 data.drop(['Transaction Id'], axis=1, inplace=True)
 data.drop(['Time Zone'], axis=1, inplace=True)
@@ -130,11 +130,76 @@ data['CF (Expected Answer)'] = data['CF (Expected Answer)'].apply(lambda x: labe
 #
 # data = pd.get_dummies(data, columns=['Anon Student Id'])
 
+# Anon Student Id
+label5 = data['Anon Student Id'].unique().tolist()
+data['Anon Student Id'] = data['Anon Student Id'].apply(lambda x: label5.index(x))
 
-# data=pd.DataFrame(data, dtype=np.float) #这条语句用来处理duration
+
+# Tutor Name
+label6 = data["Level (Tutor Name)"].unique().tolist()
+data["Level (Tutor Name)"] = data["Level (Tutor Name)"].apply(lambda x: label6.index(x))
+
+# Tutor
+text1 = data["Level (Tutor)"]
+# 截取string字符串实现分类
+d_list = text1.str.split(".").tolist()
+print(d_list)
+# 获取分类列表，实现去重
+b_list = [n for m in d_list for n in m]
+
+category_column = list(set(b_list))
+data_tutor = pd.DataFrame(np.zeros((data.shape[0], len(category_column))), columns=category_column)
+print("#### Level (Tutor) DataFrame 生成中 ####")
+
+# """
+for m in range(data.shape[0]):
+    # print(m, d_list[m])
+    data_tutor.loc[m, d_list[m]] = 1
+# """
+
+data_tutor['Row'] = data['Row']
+
+data_tutor.to_csv(r'D:\Datasets\village_130_tutor.csv', sep=',', header=True, index=False)
+print('#### Level (Tutor) DataFrame 已生成 ####')
+data.drop(['Level (Tutor)'], axis=1, inplace=True)
+
+
+# Problem Name
+label7 = data["Problem Name"].unique().tolist()
+data["Problem Name"] = data["Problem Name"].apply(lambda x: label7.index(x))
+# print(data_problem.shape)
+
+print('data_tutor  ', data_tutor.shape)
+print('data  ', data.shape)
+
+#处理duration，字符串直接转数字
+data["Duration (sec)"] = pd.to_numeric(data["Duration (sec)"], errors='coerce')
 
 data.info()
 print("##########################################\n\n\n\n")
+
+"""
+# # #
+# STEP 5
+# 归一化
+print("################  STEP 5  ################")
+
+column_list = ['Duration (sec)',
+               # 'Attempt At Step'
+               # 'CF (Attempt Number)',
+               'CF (Hiatus sec)',
+               # 'CF (Matrix Level)'
+               ]
+
+for i in column_list:
+    Max = np.max(data[i])
+    Min = np.min(data[i])
+    data[i] = (data[i] - Min)/(Max - Min)
+
+
+print("##########################################\n\n\n\n")
+"""
+
 """
 
 Time spent on similar previous problems-duration
