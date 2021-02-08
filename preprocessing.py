@@ -1,12 +1,25 @@
 import pandas as pd
 import numpy as np
+# 其余包在需要时引入，不统一写在顶部
+
+
+
+
+
+
+
 
 # # #
 # STEP 1
 # 导入.csv文件 路径如下
+# 全部.csv文件都会存放在D:\Datasets中
 print("################  STEP 1  ################")
 data = pd.read_csv(r"D:\Datasets\village_130.csv")#, index_col=0)
 print("##########################################\n\n\n\n")
+
+
+
+
 
 
 
@@ -34,13 +47,11 @@ data.drop(['School'], axis=1, inplace=True)
 data.drop(['Class'], axis=1, inplace=True)
 data.drop(['CF (File)'], axis=1, inplace=True)
 data.drop(['CF (Original DS Export File)'], axis=1, inplace=True)
-# # #
 data.drop(['CF (Village)'], axis=1, inplace=True)
 data.drop(['CF (Week)'], axis=1, inplace=True)
 data.drop(['CF (Total Activity Problems)'], axis=1, inplace=True)
 data.drop(['CF (Session Sequence)'], axis=1, inplace=True)
 data.drop(['CF (Unix Epoch)'], axis=1, inplace=True)
-# # #
 data.drop(['Session Id'], axis=1, inplace=True)
 data.drop(['Time'], axis=1, inplace=True)
 data.drop(['CF (Date)'], axis=1, inplace=True)
@@ -50,7 +61,6 @@ data.drop(['CF (Original Order)'], axis=1, inplace=True)
 data.drop(['Problem Start Time'], axis=1, inplace=True)
 data.drop(['CF (Activity Finished)'], axis=1, inplace=True)
 data.drop(['CF (Activity Started)'], axis=1, inplace=True)
-# # #
 data.drop(['CF (Placement Test Flag)'], axis=1, inplace=True)
 data.drop(['CF (Placement Test User)'], axis=1, inplace=True)
 data.drop(['CF (Child Id)'], axis=1, inplace=True)
@@ -60,13 +70,12 @@ data.drop(['CF (Duration sec)'], axis=1, inplace=True)
 data.drop(['Outcome'], axis=1, inplace=True)
 # # #
 data.info()#
-print('排除掉肯定不用的column之后检查数据集，剩下问题的主要集中在下面几列')
-print('①Input 两个缺失值，丢弃')
-print('②CF(Expected Answer) 几十个缺失值，丢弃')
-print('③CF(Hiatus sec) 几十个缺失值，丢弃')
-print('④CF (Student Used Scaffold) 大量缺失值，0填充')
-print('⑥此外还要把所有的object转为数字')
+
 print("##########################################\n\n\n\n")
+
+
+
+
 
 
 
@@ -74,6 +83,14 @@ print("##########################################\n\n\n\n")
 # # #
 # STEP 3
 # 缺失值处理
+"""
+排除掉肯定不用的column之后检查数据集，
+①Input 两个缺失值，丢弃
+②CF(Expected Answer) 几十个缺失值，丢弃
+③CF(Hiatus sec) 几十个缺失值，丢弃
+④CF (Student Used Scaffold) 大量缺失值，0填充
+⑥此外还要把所有的object转为数字
+"""
 print("################  STEP 3  ################")
 print("对于缺失特别多的scaffold，对其进行缺失值填补")
 # 缺失值填补 CF (Student Used Scaffold)
@@ -92,6 +109,10 @@ data.loc[:, "CF (Student Used Scaffold)"] = imp_0
 data = data.dropna()
 data.info()# 检查
 print("##########################################\n\n\n\n")
+
+
+
+
 
 
 
@@ -134,9 +155,10 @@ b_list = [n for m in d_list for n in m]
 
 category_column = list(set(b_list))
 data_tutor = pd.DataFrame(np.zeros((data.shape[0], len(category_column))), columns=category_column)
-print("#### Level (Tutor) DataFrame 生成中 ####")
 
+# 下面注释掉的代码可以用来生成一个Level(Tutor)的词矩阵
 """
+print("#### Level (Tutor) DataFrame 生成中 ####")
 for m in range(data.shape[0]):
     # print(m, d_list[m])
     data_tutor.loc[m, d_list[m]] = 1
@@ -145,8 +167,8 @@ for m in range(data.shape[0]):
 data_tutor['Row'] = data['Row']
 
 data_tutor.to_csv(r'D:\Datasets\village_130_tutor.csv', sep=',', header=True, index=False)
-"""
 print('#### Level (Tutor) DataFrame 已生成 ####')
+"""
 data.drop(['Level (Tutor)'], axis=1, inplace=True)
 
 
@@ -169,13 +191,16 @@ print("##########################################\n\n\n\n")
 # STEP 5
 # 归一化
 print("################  STEP 5  ################")
-
+#需要归一化处理的column
 column_list = ['Duration (sec)',
                # 'Attempt At Step'
                # 'CF (Attempt Number)',
                'CF (Hiatus sec)',
                # 'CF (Matrix Level)'
                ]
+
+
+#下面代码存在问题，会删除全部数据
 """
 from scipy import stats
 constrains1 = data[['CF (Hiatus sec)']] \
@@ -189,12 +214,14 @@ constrains2 = data[['Duration (sec)']] \
 print(constrains2)
 # Drop (inplace) values set to be rejected
 # data.drop(data.index[~constrains], inplace=True)
-# """
+"""
 
-# data = data.drop(data['CF (Hiatus sec)'].idxmax())
+
+# 下面的代码可以用来删除过长的Duration
+"""
 while data['Duration (sec)'].idxmax() > 300.0:
     data = data.drop(data['Duration (sec)'].idxmax())
-
+"""
 
 for i in column_list:
     Max = np.max(data[i])
@@ -203,10 +230,16 @@ for i in column_list:
     data[i] = (data[i] - Min)/(Max - Min)
 
 data.info()
-print(data['Duration (sec)'])
+#print(data['Duration (sec)'])
 
 print("##########################################\n\n\n\n")
-# """
 
+
+
+
+
+
+
+#将预处理完成后的数据保存的village_130_1.csv中
 data.to_csv(r'D:\Datasets\village_130_1.csv', sep=',', header=True, index=False)
 
