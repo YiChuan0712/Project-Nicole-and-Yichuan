@@ -201,20 +201,14 @@ column_list = ['Duration (sec)',
 
 
 #下面代码存在问题，会删除全部数据
-"""
+# print(data)
+backupdata = data[['CF (Hiatus sec)']]
+print(backupdata)
 from scipy import stats
-constrains1 = data[['CF (Hiatus sec)']] \
-    .apply(lambda x: np.abs(stats.zscore(x)) < 5) \
-    .all(axis=1)
-print(constrains1)
-
-constrains2 = data[['Duration (sec)']] \
-    .apply(lambda x: np.abs(stats.zscore(x)) < 5) \
-    .all(axis=1)
-print(constrains2)
+constrains = backupdata.apply(lambda x: np.abs(stats.zscore(x)) <2).all(axis=1)
 # Drop (inplace) values set to be rejected
-# data.drop(data.index[~constrains], inplace=True)
-"""
+data.drop(backupdata.index[~constrains], inplace=True)
+print('print',data)
 
 
 # 下面的代码可以用来删除过长的Duration
