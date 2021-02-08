@@ -7,10 +7,10 @@ Preprocessing.py
     ② Level (Tutor)和Problem Name两项暂时没有得到很好的处理.
 
 
-NaiveBayes.py
+NaiveBayes.py（已废弃，见GaussianNB.py，性能更好一些）
 
-    ① 预测准确率较低（83），鉴于代码非常粗糙，可能含有问题
-
+    ① 预测准确率较低（83），鉴于代码非常粗糙（手撸的NaiveBayes，没用现成的包所以性能很差），可能含有问题
+    
 
 DecisionTree.py
 
