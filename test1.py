@@ -61,19 +61,11 @@ data.drop(['Outcome'], axis=1, inplace=True)
 # # #
 data.info()#
 print('排除掉肯定不用的column之后检查数据集，剩下问题的主要集中在下面几列')
-
-print('①Input 两个缺失值')
-
-print('②CF(Expected Answer) 几十个缺失值')
-
-print('③CF(Hiatus sec) 几十个缺失值')
-
-print('④CF (Student Used Scaffold) 大量缺失值')
-
-print('⑤上面几个缺失很少可以直接删除 但是Scaffold不行，必须对缺失值进行填补')
-
+print('①Input 两个缺失值，丢弃')
+print('②CF(Expected Answer) 几十个缺失值，丢弃')
+print('③CF(Hiatus sec) 几十个缺失值，丢弃')
+print('④CF (Student Used Scaffold) 大量缺失值，0填充')
 print('⑥此外还要把所有的object转为数字')
-
 print("##########################################\n\n\n\n")
 
 
@@ -86,25 +78,18 @@ print("################  STEP 3  ################")
 print("对于缺失特别多的scaffold，对其进行缺失值填补")
 # 缺失值填补 CF (Student Used Scaffold)
 label1 = data['CF (Student Used Scaffold)'].unique().tolist()
-
 # 转数字
 data['CF (Student Used Scaffold)'] = data['CF (Student Used Scaffold)'].apply(lambda x: label1.index(x))
-
 temp = data.loc[:, "CF (Student Used Scaffold)"].values.reshape(-1, 1)  # sklearn当中特征矩阵必须是二维
-
 from sklearn.impute import SimpleImputer
-
 imp_0 = SimpleImputer(strategy="constant", fill_value=0)  # 用0填补
-
 imp_0 = imp_0.fit_transform(temp)
 
 # 在这里用0填补
 data.loc[:, "CF (Student Used Scaffold)"] = imp_0
 
-
 # 填补完之后 考虑到剩下的column缺失值很少而且都是难以填补的 直接丢弃
 data = data.dropna()
-
 data.info()# 检查
 print("##########################################\n\n\n\n")
 
@@ -151,15 +136,16 @@ category_column = list(set(b_list))
 data_tutor = pd.DataFrame(np.zeros((data.shape[0], len(category_column))), columns=category_column)
 print("#### Level (Tutor) DataFrame 生成中 ####")
 
-# """
+"""
 for m in range(data.shape[0]):
     # print(m, d_list[m])
     data_tutor.loc[m, d_list[m]] = 1
-# """
+
 
 data_tutor['Row'] = data['Row']
 
 data_tutor.to_csv(r'D:\Datasets\village_130_tutor.csv', sep=',', header=True, index=False)
+"""
 print('#### Level (Tutor) DataFrame 已生成 ####')
 data.drop(['Level (Tutor)'], axis=1, inplace=True)
 
@@ -174,11 +160,11 @@ print('data  ', data.shape)
 
 #处理duration，字符串直接转数字
 data["Duration (sec)"] = pd.to_numeric(data["Duration (sec)"], errors='coerce')
-
+data = data.dropna()
 data.info()
 print("##########################################\n\n\n\n")
 
-"""
+# """
 # # #
 # STEP 5
 # 归一化
@@ -190,29 +176,37 @@ column_list = ['Duration (sec)',
                'CF (Hiatus sec)',
                # 'CF (Matrix Level)'
                ]
+"""
+from scipy import stats
+constrains1 = data[['CF (Hiatus sec)']] \
+    .apply(lambda x: np.abs(stats.zscore(x)) < 5) \
+    .all(axis=1)
+print(constrains1)
+
+constrains2 = data[['Duration (sec)']] \
+    .apply(lambda x: np.abs(stats.zscore(x)) < 5) \
+    .all(axis=1)
+print(constrains2)
+# Drop (inplace) values set to be rejected
+# data.drop(data.index[~constrains], inplace=True)
+# """
+
+# data = data.drop(data['CF (Hiatus sec)'].idxmax())
+while data['Duration (sec)'].idxmax() > 300.0:
+    data = data.drop(data['Duration (sec)'].idxmax())
+
 
 for i in column_list:
     Max = np.max(data[i])
     Min = np.min(data[i])
+    print(i, ' ', "Max = ", Max, "Min = ", Min)
     data[i] = (data[i] - Min)/(Max - Min)
 
+data.info()
+print(data['Duration (sec)'])
 
 print("##########################################\n\n\n\n")
-"""
+# """
 
-"""
+data.to_csv(r'D:\Datasets\village_130_1.csv', sep=',', header=True, index=False)
 
-Time spent on similar previous problems-duration
-
-Number of attempting
-
-Historical % correct on "similar" items ( column: outcome)
-
-whether student used scaffold: Hint / Not hint / Quit / NAN
-whether a student used scaffold on similar items
-CF student chooses to repeat #
-Matrix Level, the difficulty of problems
-Whether the student chooses to repeat.
-Tutor Sequence User, the number of tutors a student experienced, may affect the Outcome (also Tutor Sequence Session）.
-
-"""
