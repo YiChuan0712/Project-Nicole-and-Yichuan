@@ -9,7 +9,7 @@ Preprocessing.py
 
 NaiveBayes.py
 
-    ① 预测准确率较低（83），因为代码非常粗糙，可能含有问题
+    ① 预测准确率较低（83），鉴于代码非常粗糙，可能含有问题
 
 
 DecisionTree.py
