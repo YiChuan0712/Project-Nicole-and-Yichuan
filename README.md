@@ -10,3 +10,8 @@ Preprocessing.py
 NaiveBayes.py
 
 ① 预测准确率较低，因为代码非常粗糙，可能含有问题
+
+
+DecisionTree.py
+
+① 调参后效果尚可，本身score 91.5，交叉验证88.5，相比未调参的93.5有下降但是稳定性提升很多
