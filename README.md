@@ -6,3 +6,7 @@ Preprocessing.py
 
 ② Level (Tutor)和Problem Name两项暂时没有得到很好的处理.
 
+
+NaiveBayes.py
+
+① 预测准确率较低，因为代码非常粗糙，可能含有问题
