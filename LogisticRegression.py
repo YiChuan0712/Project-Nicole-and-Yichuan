@@ -9,7 +9,7 @@ from sklearn.metrics import accuracy_score
 data = pd.read_csv(r"/Users/song/Desktop/village_130_1.csv")  # , index_col=0)
 data.info()
 
-pd.set_option('display.max_columns', 5)
+pd.set_option('display.max_columns', 20)
 pd.set_option('display.expand_frame_repr', False)
 corr = data[['Duration (sec)', 'CF (Matrix)', 'Attempt At Step', 'Is Last Attempt', 'CF (Attempt Number)',
              'CF (Student Chose Repeat)', 'CF (Student Used Scaffold)']].corr()
