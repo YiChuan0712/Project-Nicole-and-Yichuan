@@ -1,0 +1,43 @@
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+data = pd.read_csv(r"/Users/song/Desktop/village_130_1.csv")
+data.info()
+related_df = data[
+    ['Duration (sec)', 'CF (Attempt Number)', 'Input', 'Level (Tutor Name)', 'CF (Outcome Numeric)', 'CF (Matrix)',
+     'CF (Matrix Level)', 'Anon Student Id', 'CF (Tutor Sequence User)', 'CF (Student Chose Repeat)', 'Is Last Attempt',
+     'CF (Student Used Scaffold)', 'Attempt At Step', 'CF(Placement Test User)']];
+
+
+def get_correct_rate_chart(source_df, column_name):
+    # df = source_df.loc[related_df['CF_Attempt_Number'] == 1]
+    df = source_df.groupby([column_name])['CF (Outcome Numeric)'].agg({'count': 'count', 'sum': 'sum'})
+    df['correct_rate'] = df['sum'] / df['count']
+    df = df.reset_index()
+    sns.barplot(y='correct_rate', data=df, x=column_name)
+    plt.show()
+
+
+def get_count_chart(source_df, column_name):
+    df = source_df.groupby([column_name, 'CF (Outcome Numeric)'])['Duration (sec)'].count().reset_index()
+    df.columns = [column_name, 'CF (Outcome Numeric)', 'count']
+    sns.barplot(hue=column_name, y='count', data=df, x='CF (Outcome Numeric)')
+    plt.show()
+
+#Analysting student's first attempt
+
+# get_correct_rate_chart(related_df, 'CF (Matrix Level)')
+
+get_count_chart(related_df, 'CF (Matrix)')
+
+get_count_chart(related_df,'CF (Outcome Numeric)')
+
+get_correct_rate_chart(related_df,'CF(Placement Test User)')
+
+get_correct_rate_chart(related_df,'CF (Student Chose Repeat)')
+
+get_correct_rate_chart(related_df,'Is Last Attempt')
+
+get_correct_rate_chart(related_df,'CF(Student_Used_Scaffold)')
