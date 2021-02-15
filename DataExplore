@@ -41,3 +41,4 @@ get_correct_rate_chart(related_df, 'CF (Student Chose Repeat)')
 get_correct_rate_chart(related_df, 'Is Last Attempt')
 
 get_correct_rate_chart(related_df, 'CF (Student_Used_Scaffold)')
+
