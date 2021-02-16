@@ -1,5 +1,5 @@
 import numpy as np
-
+import Levenshtein
 
 def StringDistance(str1, str2):
     m = str1.__len__()
@@ -50,3 +50,7 @@ print('similarity: ', 1 - result / max(len(a), len(b)))
 
 c = [a, b]
 print('longest common prefix: ', LongestCommonPrefix(c))
+
+sim = Levenshtein.jaro_winkler(a, b)
+
+print ('Levenshtein.jaro_winkler similarity: ', sim)
