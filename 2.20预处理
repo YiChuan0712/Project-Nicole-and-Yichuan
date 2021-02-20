@@ -54,7 +54,7 @@ print("################  STEP 3  ################")
 # 删除countingx
 data = data[~data['Level (Tutor Name)'].isin(['countingx'])]
 
-# 删除story.hear
+# 删除story.hear 这几行代码可以不看
 _data = data[data['Level (Tutor)'].str.contains('story.hear')]
 # _data.info()
 # data.info()
@@ -70,7 +70,7 @@ print("##########################################\n\n\n\n")
 
 # # #
 # STEP 4
-# 处理缺失值和object类型
+# 处理缺失值(缺失都集中在Duration 直接丢弃)和object类型
 print("################  STEP 4  ################")
 data = data.dropna()
 data.info()
@@ -91,9 +91,11 @@ column_list = ['CF (Duration sec)']
 
 _std = data.groupby('Level (Tutor Name)')[['CF (Duration sec)']].std()
 print(_std)
+# 上面这行代码会显示group by 'Level (Tutor Name)'的标准差
 
 # print(data[(data['Level (Tutor Name)'] == 'akira') & (data['CF (Duration sec)'] > 3*4.997130)]['CF (Duration sec)'])
 n = 3
+# 超过三个标准差就丢弃
 data = data.drop(data[(data['Level (Tutor Name)'] == 'akira') & (data['CF (Duration sec)'] > n * 4.997130)].index)
 data = data.drop(data[(data['Level (Tutor Name)'] == 'bigmath') & (data['CF (Duration sec)'] > n * 22.164157)].index)
 data = data.drop(data[(data['Level (Tutor Name)'] == 'bubble_pop') & (data['CF (Duration sec)'] > n * 24.474361)].index)
@@ -104,7 +106,7 @@ data = data.drop(data[(data['Level (Tutor Name)'] == 'astory_reading') & (data['
 data = data.drop(data[(data['Level (Tutor Name)'] == 'word_copy') & (data['CF (Duration sec)'] > n * 10.993734)].index)
 
 data.info()
-# 归一
+# 归一化
 for i in column_list:
     Max = np.max(data[i])
     Min = np.min(data[i])
@@ -112,6 +114,7 @@ for i in column_list:
     data[i] = (data[i] - Min)/(Max - Min)
 
 data = pd.get_dummies(data)
+# 独热编码
 print("##########################################\n\n\n\n")
 
 
