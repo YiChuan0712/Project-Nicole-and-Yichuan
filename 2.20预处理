@@ -93,7 +93,7 @@ _std = data.groupby('Level (Tutor Name)')[['CF (Duration sec)']].std()
 print(_std)
 
 # print(data[(data['Level (Tutor Name)'] == 'akira') & (data['CF (Duration sec)'] > 3*4.997130)]['CF (Duration sec)'])
-n = 4
+n = 3
 data = data.drop(data[(data['Level (Tutor Name)'] == 'akira') & (data['CF (Duration sec)'] > n * 4.997130)].index)
 data = data.drop(data[(data['Level (Tutor Name)'] == 'bigmath') & (data['CF (Duration sec)'] > n * 22.164157)].index)
 data = data.drop(data[(data['Level (Tutor Name)'] == 'bubble_pop') & (data['CF (Duration sec)'] > n * 24.474361)].index)
