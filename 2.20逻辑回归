@@ -15,7 +15,7 @@ data = pd.read_csv(r"D:\Datasets\final_clean.csv")  # , index_col=0)
 #
 #
 #
-# data.info()
+data.info()
 X = data.iloc[:, data.columns != "CF (Outcome Numeric)"]
 y = data.iloc[:, data.columns == "CF (Outcome Numeric)"]
 #
@@ -27,14 +27,17 @@ list = data['Anon Student Id'].unique()
 print("\n\n\n\n以下是每次踢出一个学生的交叉验证方法")
 sum = []
 for i in list:
-    Test = data[data['Anon Student Id'].isin([i])]
-    Train = data[~data['Anon Student Id'].isin([i])]
+    Test = data[data['Anon Student Id'].isin([i])].copy()
+    Train = data[~data['Anon Student Id'].isin([i])].copy()
+    Test.drop(['Anon Student Id'], axis=1, inplace=True)
+    Train.drop(['Anon Student Id'], axis=1, inplace=True)
     # Test.info()
     # Train.info()
     Xtest = Test.iloc[:, Test.columns != "CF (Outcome Numeric)"]
     Ytest = Test.iloc[:, Test.columns == "CF (Outcome Numeric)"]
     Xtrain = Train.iloc[:, Train.columns != "CF (Outcome Numeric)"]
     Ytrain = Train.iloc[:, Train.columns == "CF (Outcome Numeric)"]
+
     logit = LogisticRegression(C=1.6, solver='lbfgs', max_iter=10000)
     logit.fit(Xtrain, Ytrain.values.ravel())
     #
