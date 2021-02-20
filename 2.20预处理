@@ -1,0 +1,124 @@
+import pandas as pd
+import numpy as np
+# 其余包在需要时引入，不统一写在顶部
+
+
+# # #
+# STEP 1
+# 导入.csv文件 路径如下
+print("################  STEP 1  ################")
+# data = pd.read_csv(r"/Users/song/Desktop/clean.csv")  # , index_col=0)
+data = pd.read_csv(r"D:\Datasets\clean.csv")#, index_col=0)
+print("##########################################\n\n\n\n")
+
+
+# # #
+# STEP 2
+# 丢弃一部分无用数据 并检查数据集
+print("################  STEP 2  ################")
+data.info()
+data.drop(['Row'], axis=1, inplace=True)
+data.drop(['CF (File)'], axis=1, inplace=True)
+data.drop(['CF (Week)'], axis=1, inplace=True)
+data.drop(['CF (Total Activity Problems)'], axis=1, inplace=True)
+data.drop(['CF (Session Sequence)'], axis=1, inplace=True)
+data.drop(['Session Id'], axis=1, inplace=True)
+data.drop(['CF (Date)'], axis=1, inplace=True)
+data.drop(['CF (Matrix Order)'], axis=1, inplace=True)
+data.drop(['CF (Original Order)'], axis=1, inplace=True)
+data.drop(['CF (Activity Finished)'], axis=1, inplace=True)
+data.drop(['CF (Activity Started)'], axis=1, inplace=True)
+data.drop(['CF (Child Id)'], axis=1, inplace=True)
+data.drop(['CF (Robotutor Mode)'], axis=1, inplace=True)
+data.drop(['CF (Expected Answer)'], axis=1, inplace=True)
+data.drop(['Outcome'], axis=1, inplace=True)
+# data.drop(['Anon Student Id'], axis=1, inplace=True)
+# data.drop(['Level (Tutor)'], axis=1, inplace=True)
+data.drop(['Problem Name'], axis=1, inplace=True)
+data.drop(['Is Last Attempt'], axis=1, inplace=True)
+data.drop(['Input'], axis=1, inplace=True)
+data.drop(['CF (Problem Number)'], axis=1, inplace=True)
+data.drop(['CF (Student Chose Repeat)'], axis=1, inplace=True)
+data.drop(['CF (Student Used Scaffold)'], axis=1, inplace=True)
+data.drop(['CF (Tutor Sequence Session)'], axis=1, inplace=True)
+data.drop(['CF (Tutor Sequence User)'], axis=1, inplace=True)
+# # #
+data.info()  #
+print("##########################################\n\n\n\n")
+
+
+# # #
+# STEP 3
+# 删除countingx, story_hear
+print("################  STEP 3  ################")
+# 删除countingx
+data = data[~data['Level (Tutor Name)'].isin(['countingx'])]
+
+# 删除story.hear
+_data = data[data['Level (Tutor)'].str.contains('story.hear')]
+# _data.info()
+# data.info()
+test1 = list(_data['Level (Tutor)'])
+# print(test1)
+test2 = list(data['Level (Tutor)'])
+ret = list(set(test2) ^ set(test1))
+data = data[data['Level (Tutor)'].isin(ret)]
+data.drop(['Level (Tutor)'], axis=1, inplace=True)
+data.info()
+print("##########################################\n\n\n\n")
+
+
+# # #
+# STEP 4
+# 处理缺失值和object类型
+print("################  STEP 4  ################")
+data = data.dropna()
+data.info()
+# Anon Student Id
+label1 = data['Anon Student Id'].unique().tolist()
+data['Anon Student Id'] = data['Anon Student Id'].apply(lambda x: label1.index(x))
+# print(data['Anon Student Id'].unique())
+# data.info()
+data.info()
+print("##########################################\n\n\n\n")
+
+
+# # #
+# STEP 5
+# 处理duration 超过一定标准差(3个，按照tutorname分类)就删除 顺便完成归一化和独热编码
+print("################  STEP 5  ################")
+column_list = ['CF (Duration sec)']
+
+_std = data.groupby('Level (Tutor Name)')[['CF (Duration sec)']].std()
+print(_std)
+
+# print(data[(data['Level (Tutor Name)'] == 'akira') & (data['CF (Duration sec)'] > 3*4.997130)]['CF (Duration sec)'])
+n = 4
+data = data.drop(data[(data['Level (Tutor Name)'] == 'akira') & (data['CF (Duration sec)'] > n * 4.997130)].index)
+data = data.drop(data[(data['Level (Tutor Name)'] == 'bigmath') & (data['CF (Duration sec)'] > n * 22.164157)].index)
+data = data.drop(data[(data['Level (Tutor Name)'] == 'bubble_pop') & (data['CF (Duration sec)'] > n * 24.474361)].index)
+data = data.drop(data[(data['Level (Tutor Name)'] == 'picmatch') & (data['CF (Duration sec)'] > n * 7.634508)].index)
+data = data.drop(data[(data['Level (Tutor Name)'] == 'spelling') & (data['CF (Duration sec)'] > n * 5.993537)].index)
+data = data.drop(data[(data['Level (Tutor Name)'] == 'story_questions') & (data['CF (Duration sec)'] > n * 220.981683)].index)
+data = data.drop(data[(data['Level (Tutor Name)'] == 'astory_reading') & (data['CF (Duration sec)'] > n * 2.864464)].index)
+data = data.drop(data[(data['Level (Tutor Name)'] == 'word_copy') & (data['CF (Duration sec)'] > n * 10.993734)].index)
+
+data.info()
+# 归一
+for i in column_list:
+    Max = np.max(data[i])
+    Min = np.min(data[i])
+    print(i, ' ', "Max = ", Max, "Min = ", Min)
+    data[i] = (data[i] - Min)/(Max - Min)
+
+data = pd.get_dummies(data)
+print("##########################################\n\n\n\n")
+
+
+# # #
+# STEP 6
+# 将预处理完成后的数据保存到final_clean.csv中
+print("################  STEP 6  ################")
+# data.to_csv(r'/Users/song/Desktop/final_clean.csv', sep=',', header=True, index=False)
+data.to_csv(r"D:\Datasets\final_clean.csv", sep=',', header=True, index=False)
+print("##########################################\n\n\n\n")
