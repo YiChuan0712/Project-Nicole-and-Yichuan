@@ -1,0 +1,92 @@
+# 逻辑回归
+#
+#
+# 下面是一部分导入的包 剩下的包在使用时才导入（尽管这并不是一个良好的代码习惯）
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+from sklearn.tree import DecisionTreeClassifier
+#
+#
+#
+# 导入.csv文件
+data = pd.read_csv(r"D:\Datasets\final_clean.csv")  # , index_col=0)
+#
+#
+#
+data.info()
+X = data.iloc[:, data.columns != "CF (Outcome Numeric)"]
+y = data.iloc[:, data.columns == "CF (Outcome Numeric)"]
+#
+#
+#
+list = data['Anon Student Id'].unique()
+# print(list)
+
+print("\n\n\n\n以下是每次踢出一个学生的交叉验证方法")
+sum = []
+for i in list:
+    Test = data[data['Anon Student Id'].isin([i])].copy()
+    Train = data[~data['Anon Student Id'].isin([i])].copy()
+    Test.drop(['Anon Student Id'], axis=1, inplace=True)
+    Train.drop(['Anon Student Id'], axis=1, inplace=True)
+    # Test.info()
+    # Train.info()
+    Xtest = Test.iloc[:, Test.columns != "CF (Outcome Numeric)"]
+    Ytest = Test.iloc[:, Test.columns == "CF (Outcome Numeric)"]
+    Xtrain = Train.iloc[:, Train.columns != "CF (Outcome Numeric)"]
+    Ytrain = Train.iloc[:, Train.columns == "CF (Outcome Numeric)"]
+
+    clf = DecisionTreeClassifier(random_state=50
+                                 , criterion='gini'
+                                 , max_depth=3
+                                 , min_impurity_decrease=0.0
+                                 , min_samples_leaf=1
+                                 , splitter='best')
+    clf = clf.fit(Xtrain, Ytrain)
+    #
+    # 下面是这一次的score
+    acc_score = clf.score(Xtest, Ytest)
+    print("score", i)
+    print(acc_score)
+    sum.append(acc_score)
+print("score mean")
+print(np.mean(sum))
+
+
+
+
+print("\n\n\n\n以下是使用sklearn自带的方法进行划分和交叉验证")
+# 划分训练集和测试集
+data.drop(['Anon Student Id'], axis=1, inplace=True)
+from sklearn.model_selection import train_test_split
+Xtrain, Xtest, Ytrain, Ytest = train_test_split(X, y, test_size=0.2)
+
+#
+# 重新整理了索引 这行代码写不写都行 可以不看
+for i in [Xtrain, Xtest, Ytrain, Ytest]:
+    i.index = range(i.shape[0])
+#
+#
+clf = DecisionTreeClassifier(random_state=50
+                             , criterion='entropy'
+                             , max_depth=3
+                             , min_impurity_decrease=0.0
+                             , min_samples_leaf=1
+                             , splitter='best')
+clf = clf.fit(Xtrain, Ytrain)
+
+# 一次的score
+acc_score = clf.score(Xtest, Ytest)
+print("score")
+print(acc_score)
+#
+# 进行交叉验证 十次
+from sklearn.model_selection import cross_val_score
+cross_score = cross_val_score(clf, X, y.values.ravel(), cv=10).mean()
+print("score mean")
+print(cross_score)
+
+
