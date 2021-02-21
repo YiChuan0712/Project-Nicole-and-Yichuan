@@ -39,7 +39,7 @@ data.drop(['Is Last Attempt'], axis=1, inplace=True)
 data.drop(['Input'], axis=1, inplace=True)
 data.drop(['CF (Problem Number)'], axis=1, inplace=True)
 data.drop(['CF (Student Chose Repeat)'], axis=1, inplace=True)
-# data.drop(['CF (Student Used Scaffold)'], axis=1, inplace=True)
+data.drop(['CF (Student Used Scaffold)'], axis=1, inplace=True)
 data.drop(['CF (Tutor Sequence Session)'], axis=1, inplace=True)
 data.drop(['CF (Tutor Sequence User)'], axis=1, inplace=True)
 # # #
@@ -81,7 +81,7 @@ data['Anon Student Id'] = data['Anon Student Id'].apply(lambda x: label1.index(x
 
 # CF (Student Used Scaffold)
 # print(data['CF (Student Used Scaffold)'].unique())
-data['CF (Student Used Scaffold)'].fillna('not tapped', inplace=True)
+# data['CF (Student Used Scaffold)'].fillna('not tapped', inplace=True)
 # label2 = data['CF (Student Used Scaffold)'].unique().tolist()
 # data['CF (Student Used Scaffold)'] = data['CF (Student Used Scaffold)'].apply(lambda x: label2.index(x))
 
