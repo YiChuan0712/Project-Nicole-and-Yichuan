@@ -1,0 +1,4 @@
+AIC和BIC在LR和RF里面都有
+画图的代码原来有点小问题我改了一下
+RF用以下参数效果会更好
+{'criterion': 'gini', 'max_depth': 3, 'min_impurity_decrease': 0.0, 'min_samples_leaf': 11}
