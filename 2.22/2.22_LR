@@ -92,32 +92,3 @@ from sklearn.model_selection import cross_val_score
 cross_score = cross_val_score(LR, X, y.values.ravel(), cv=10).mean()
 print("score mean\n", cross_score)
 
-
-
-
-
-
-
-
-"""
-print("TIME WARNING  TIME WARNING  TIME WARNING  TIME WARNING  \n")
-print("TIME WARNING  TIME WARNING  TIME WARNING  TIME WARNING  \n")
-print("TIME WARNING  TIME WARNING  TIME WARNING  TIME WARNING  \n")
-print("TIME WARNING  TIME WARNING  TIME WARNING  TIME WARNING  \n")
-
-import numpy as np
-
-parameters = {'solver': ('liblinear', 'lbfgs', 'newton-cg', 'sag', 'saga')
-    , 'C': [*np.linspace(0.1, 2.0, 20)]
-    ,  
-              }
-
-lgt = LogisticRegression()
-from sklearn.model_selection import GridSearchCV
-GS = GridSearchCV(lgt, parameters, cv=10)
-GS = GS.fit(Xtrain, Ytrain.values.ravel())
-
-print("best params\n", GS.best_params_)
-
-print("best score\n", GS.best_score_)
-"""
