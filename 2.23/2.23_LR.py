@@ -10,6 +10,8 @@ from sklearn.linear_model import LogisticRegression
 #
 #
 #
+
+
 def aic(y, y_pred, p):
     n = len(y)
     resid = np.subtract(y_pred, y)
@@ -25,17 +27,30 @@ def bic(y, y_pred, p):
     return BIC
 #
 # 导入.csv文件
-data = pd.read_csv(r"D:\Datasets\final_clean.csv")  # , index_col=0)
+data = pd.read_csv(r"/Users/LingZhang/Desktop/final_clean.csv")  # , index_col=0)
 data.drop(['CF (Attempt Number)'], axis=1, inplace=True)
+data.drop(['CF (Matrix)_stories'], axis=1, inplace=True)
+
 #
 #
 #
+pd.set_option('display.max_columns', 5)
+pd.set_option('display.expand_frame_repr', False)
 data.info()
+corr = data[['CF (Duration sec)', 'CF (Matrix Level)', 'Level (Tutor Name)_akira', 'Level (Tutor Name)_bigmath', 'Level (Tutor Name)_bubble_pop' ,'Level (Tutor Name)_picmatch',
+             'Level (Tutor Name)_spelling','Level (Tutor Name)_story_questions','Level (Tutor Name)_story_reading','Level (Tutor Name)_word_copy',
+             'CF (Matrix)_literacy','CF (Matrix)_math']].corr()
+print(corr)
+heat_map = sns.heatmap(corr, xticklabels=corr.columns, yticklabels=corr.columns)
+plt.show()
+# data.info()
 X = data.iloc[:, data.columns != "CF (Outcome Numeric)"]
 y = data.iloc[:, data.columns == "CF (Outcome Numeric)"]
 #
 #
 #
+
+
 list = data['Anon Student Id'].unique()
 # print(list)
 #
@@ -84,8 +99,8 @@ print("score\n", acc_score)
 
 
 Ypred = LR.predict(Xtest)
-print("AIC\n", aic(np.array(Ytest), Ypred, 13))
-print("BIC\n", bic(np.array(Ytest), Ypred, 13))
+print("AIC\n", aic(np.array(Ytest), Ypred, 12))
+print("BIC\n", bic(np.array(Ytest), Ypred, 12))
 
 #
 # 进行交叉验证 十次

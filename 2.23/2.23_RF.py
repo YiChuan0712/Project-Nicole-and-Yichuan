@@ -25,10 +25,9 @@ def bic(y, y_pred, p):
     return BIC
 #
 # 导入.csv文件
-data = pd.read_csv(r"D:\Datasets\final_clean.csv")  # , index_col=0)
+data = pd.read_csv(r"/Users/LingZhang/Desktop/final_clean.csv")  # , index_col=0)
 data.drop(['CF (Attempt Number)'], axis=1, inplace=True)
-#
-#
+data.drop(['CF (Matrix)_stories'], axis=1, inplace=True)
 #
 data.info()
 X = data.iloc[:, data.columns != "CF (Outcome Numeric)"]
@@ -53,7 +52,7 @@ for i in list:
     Xtrain = Train.iloc[:, Train.columns != "CF (Outcome Numeric)"]
     Ytrain = Train.iloc[:, Train.columns == "CF (Outcome Numeric)"]
 
-    RF = RandomForestClassifier(criterion='gini', max_depth=3, min_impurity_decrease=0.0, min_samples_leaf=11)
+    RF = RandomForestClassifier()
     RF.fit(Xtrain, Ytrain.values.ravel())
     #
     # 下面是这一次的score
@@ -84,8 +83,8 @@ print("score\n", acc_score)
 
 
 Ypred = RF.predict(Xtest)
-print("AIC\n", aic(np.array(Ytest), Ypred, 13))
-print("BIC\n", bic(np.array(Ytest), Ypred, 13))
+print("AIC\n", aic(np.array(Ytest), Ypred, 12))
+print("BIC\n", bic(np.array(Ytest), Ypred, 12))
 
 #
 # 进行交叉验证 十次
