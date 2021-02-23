@@ -101,7 +101,7 @@ label1 = data['Anon Student Id'].unique().tolist()
 data['Anon Student Id'] = data['Anon Student Id'].apply(lambda x: label1.index(x))
 # print(data['Anon Student Id'].unique())
 # data.info()
-# 
+#
 # 丢弃掉其余含有空值的行
 data = data.dropna()
 data.info()
@@ -120,7 +120,7 @@ print("################  STEP 5  ################")
 #
 import matplotlib.pyplot as plt
 import seaborn as sns
-# 
+#
 # 数据集右偏严重 所以取个对数
 # 可以画图来看
 #
@@ -158,21 +158,21 @@ print(_std)
 # 3个标准差
 n = 3
 datamean = data[(data['Level (Tutor Name)'] == 'akira')]['CF (Duration sec)'].mean()
-data = data.drop(data[(data['Level (Tutor Name)'] == 'akira') & (data['CF (Duration sec)'] - datamean > n * 0.273356)].index)
+data = data.drop(data[(data['Level (Tutor Name)'] == 'akira') & (data['CF (Duration sec)'] - datamean > n * 0.033961)].index)
 datamean = data[(data['Level (Tutor Name)'] == 'bigmath')]['CF (Duration sec)'].mean()
-data = data.drop(data[(data['Level (Tutor Name)'] == 'bigmath') & (data['CF (Duration sec)'] - datamean > n * 0.657661)].index)
+data = data.drop(data[(data['Level (Tutor Name)'] == 'bigmath') & (data['CF (Duration sec)'] - datamean > n * 0.081707)].index)
 datamean = data[(data['Level (Tutor Name)'] == 'bubble_pop')]['CF (Duration sec)'].mean()
-data = data.drop(data[(data['Level (Tutor Name)'] == 'bubble_pop') & (data['CF (Duration sec)'] - datamean > n * 0.596792)].index)
+data = data.drop(data[(data['Level (Tutor Name)'] == 'bubble_pop') & (data['CF (Duration sec)'] - datamean > n * 0.074145)].index)
 datamean = data[(data['Level (Tutor Name)'] == 'picmatch')]['CF (Duration sec)'].mean()
-data = data.drop(data[(data['Level (Tutor Name)'] == 'picmatch') & (data['CF (Duration sec)'] - datamean > n * 3.420231)].index)
+data = data.drop(data[(data['Level (Tutor Name)'] == 'picmatch') & (data['CF (Duration sec)'] - datamean > n * 0.424925)].index)
 datamean = data[(data['Level (Tutor Name)'] == 'spelling')]['CF (Duration sec)'].mean()
-data = data.drop(data[(data['Level (Tutor Name)'] == 'spelling') & (data['CF (Duration sec)'] - datamean > n * 1.223879)].index)
+data = data.drop(data[(data['Level (Tutor Name)'] == 'spelling') & (data['CF (Duration sec)'] - datamean > n * 0.152053)].index)
 datamean = data[(data['Level (Tutor Name)'] == 'story_questions')]['CF (Duration sec)'].mean()
-data = data.drop(data[(data['Level (Tutor Name)'] == 'story_questions') & (data['CF (Duration sec)'] - datamean > n * 1.392560)].index)
+data = data.drop(data[(data['Level (Tutor Name)'] == 'story_questions') & (data['CF (Duration sec)'] - datamean > n * 0.173010)].index)
 datamean = data[(data['Level (Tutor Name)'] == 'story_reading')]['CF (Duration sec)'].mean()
-data = data.drop(data[(data['Level (Tutor Name)'] == 'story_reading') & (data['CF (Duration sec)'] - datamean > n * 1.028287)].index)
+data = data.drop(data[(data['Level (Tutor Name)'] == 'story_reading') & (data['CF (Duration sec)'] - datamean > n * 0.127753)].index)
 datamean = data[(data['Level (Tutor Name)'] == 'word_copy')]['CF (Duration sec)'].mean()
-data = data.drop(data[(data['Level (Tutor Name)'] == 'word_copy') & (data['CF (Duration sec)'] - datamean > n * 0.878205)].index)
+data = data.drop(data[(data['Level (Tutor Name)'] == 'word_copy') & (data['CF (Duration sec)'] - datamean > n * 0.109107)].index)
 #
 # data.info()
 
@@ -201,4 +201,3 @@ print("################  STEP 7  ################")
 # data.to_csv(r'/Users/song/Desktop/final_clean.csv', sep=',', header=True, index=False)
 data.to_csv(r"D:\Datasets\final_clean.csv", sep=',', header=True, index=False)
 print("##########################################\n\n\n\n")
-
