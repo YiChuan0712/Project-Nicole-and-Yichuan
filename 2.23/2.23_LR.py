@@ -54,6 +54,7 @@ y = data.iloc[:, data.columns == "CF (Outcome Numeric)"]
 list = data['Anon Student Id'].unique()
 # print(list)
 #
+print("逻辑回归")
 print("\n\n\n\n以下是每次踢出一个学生的交叉验证方法")
 sum = []
 for i in list:
@@ -107,3 +108,4 @@ print("BIC\n", bic(np.array(Ytest), Ypred, 12))
 from sklearn.model_selection import cross_val_score
 cross_score = cross_val_score(LR, X, y.values.ravel(), cv=10).mean()
 print("score mean\n", cross_score)
+
