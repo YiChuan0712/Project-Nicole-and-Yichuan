@@ -38,6 +38,7 @@ y = data.iloc[:, data.columns == "CF (Outcome Numeric)"]
 list = data['Anon Student Id'].unique()
 # print(list)
 #
+print("随机森林")
 print("\n\n\n\n以下是每次踢出一个学生的交叉验证方法")
 sum = []
 for i in list:
