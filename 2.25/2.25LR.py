@@ -125,8 +125,7 @@ LR = LogisticRegression(max_iter=10000, C=0.1, penalty='l2', solver='newton-cg')
 LR.fit(Xtrain, Ytrain.values.ravel())
 target_probabilities = LR.predict_proba(Xtest)[:, 1]
 false_positive_rate, true_positive_rate, threshold = roc_curve(Ytest, target_probabilities)
-# print("false positive rate\n", true_positive_rate)
-# print("true positive rate\n", false_positive_rate)
+
 
 # 图像标题
 plt.title("ROC Curve - LR Model")
