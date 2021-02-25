@@ -185,3 +185,39 @@ print("TP/(TP+FN)    Sensitivity\n", TPR)
 # Precision or positive predictive value
 PPV = TP/(TP+FP)
 print("TP/(TP+FP)    Precision\n", PPV)
+
+"""
+# 可以算的比较多 我统一写在注释里 以备不时之需
+
+# Sensitivity, hit rate, recall, or true positive rate
+TPR = TP/(TP+FN)
+print("TP/(TP+FN)    True Positive Rate/Sensitivity/Hit Rate/Recall\n", TPR)
+
+# Specificity or true negative rate
+TNR = TN/(TN+FP)
+print("TN/(TN+FP)    True Negative Rate/Specificity\n", TNR)
+
+# Precision or positive predictive value
+PPV = TP/(TP+FP)
+print("TP/(TP+FP)    Positive Predictive Value/Precision\n", PPV)
+
+# Negative predictive value
+NPV = TN/(TN+FN)
+print("TN/(TN+FN)    Negative Predictive Value\n", NPV)
+
+# Fall out or false positive rate
+FPR = FP/(FP+TN)
+print("FP/(FP+TN)    False Positive Rate/Fall Out\n", FPR)
+
+# False negative rate
+FNR = FN/(TP+FN)
+print("FN/(TP+FN)    False Negative Rate\n", FNR)
+
+# False discovery rate
+FDR = FP/(TP+FP)
+print("FP/(TP+FP)    False Discovery Rate\n", FDR)
+
+
+# precision = TP / (TP+FP)  # 查准率
+# recall = TP / (TP+FN)  # 查全率
+"""
