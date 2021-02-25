@@ -25,8 +25,8 @@ def bic(y, y_pred, p):
     return BIC
 #
 # 导入.csv文件
-# data = pd.read_csv(r"/Users/LingZhang/Desktop/final_clean.csv")  # , index_col=0)
-data = pd.read_csv(r"D:\Datasets\final_clean.csv")  # , index_col=0)
+data = pd.read_csv(r"/Users/LingZhang/Desktop/final_clean.csv")  # , index_col=0)
+# data = pd.read_csv(r"D:\Datasets\final_clean.csv")  # , index_col=0)
 data.drop(['CF (Attempt Number)'], axis=1, inplace=True)
 ##################
 pd.set_option('display.max_columns', None)
@@ -125,8 +125,6 @@ RF = RandomForestClassifier(criterion='gini', max_depth=2, min_impurity_decrease
 RF.fit(Xtrain, Ytrain.values.ravel())
 target_probabilities = RF.predict_proba(Xtest)[:, 1]
 false_positive_rate, true_positive_rate, threshold = roc_curve(Ytest, target_probabilities)
-# print("false positive rate\n", true_positive_rate)
-# print("true positive rate\n", false_positive_rate)
 
 # 图像标题
 plt.title("ROC Curve - RF Model")
