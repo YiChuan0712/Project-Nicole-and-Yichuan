@@ -25,8 +25,8 @@ def bic(y, y_pred, p):
     return BIC
 #
 # 导入.csv文件
-# data = pd.read_csv(r"/Users/LingZhang/Desktop/final_clean.csv")  # , index_col=0)
-data = pd.read_csv(r"D:\Datasets\final_clean.csv")  # , index_col=0)
+data = pd.read_csv(r"/Users/LingZhang/Desktop/final_clean.csv")  # , index_col=0)
+# data = pd.read_csv(r"D:\Datasets\final_clean.csv")  # , index_col=0)
 data.drop(['CF (Attempt Number)'], axis=1, inplace=True)
 ##################
 pd.set_option('display.max_columns', None)
