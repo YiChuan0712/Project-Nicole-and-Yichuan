@@ -1,0 +1,45 @@
+2.25preprocessing.py
+
+1) 对预处理过程进行了检查 并重新整理了代码 
+
+2) 添加了一部分注释
+
+
+
+
+2.25LR & 2.25RF
+
+这两个文件的改动较大
+
+2) 重新整理了先前的 LR 和 RF两个模型的代码
+
+3) 因为在检查的过程中 发现原先的figure文件中含有一处错误：
+        def cal_evaluation(classifier, cm):
+            tn = cm[0][0]
+            fn = cm[0][1] # 此应为 fp
+            fp = cm[1][0] # 此应为 fn
+            tp = cm[1][1]
+    此处 fn 和 fp 的赋值反了 这导致后面的计算出现不少错误 会严重影响数据分析
+    
+    可参考 https://scikit-learn.org/stable/modules/generated/sklearn.metrics.confusion_matrix.html
+    这是sklearn的官方例子 采用了更安全的方式提取出tn fn fp tp
+    
+    综上 我重构了之前的figure文件中的几个画图用的函数 并移入了LR和RF两个文件中 
+    confusion matrix的画图格式我略做了一点修改 变成了与presentation的PPT中的格式(见PPT第18页)
+
+    代码中的TN FN FP TP都可以放心使用 在最后的注释中我提供了更多公式 以备不时之需
+    
+4) 根据3) 之前计算的false positive rate是错误的!!! 
+    实际上咱们模型的false positive rate有0.99!!! 
+    而不是之前计算的0.6-0.7!!!
+    
+5) 重构的ROC图像 - 我尽力保持了原先的风格 另外计算了AUC值
+
+6) 原先的figure代码将网格搜索和confusion matrices合并在了一步中
+    这是存在一定隐患的 在重构的代码中我移除了confusion matrices中的网格搜索功能
+    为了保证安全 我们还是要尽可能单独进行网格搜索
+    
+7) 一组可以参考的参数
+    {'C': 0.1, 'penalty': 'l2', 'solver': 'newton-cg'}
+    {'criterion': 'gini', 'max_depth': 2, 'min_impurity_decrease': 0.0, 'min_samples_leaf': 1}
+    
